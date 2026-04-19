@@ -7,109 +7,118 @@ import { projectMonthlyReturns } from '../../utils/projections';
 
 const router = Router();
 
-router.get('/portfolios', requireAuth, (req: AuthRequest, res: Response) => {
-  const db = getDb();
-  const portfolios = db.prepare('SELECT * FROM investment_portfolios WHERE user_id = ? ORDER BY created_at DESC').all(req.user!.id) as any[];
-  const result = portfolios.map(p => {
-    const assets = db.prepare('SELECT * FROM investment_assets WHERE portfolio_id = ?').all(p.id);
+router.get('/portfolios', requireAuth, async (req: AuthRequest, res: Response) => {
+  const sql = getDb();
+  const portfolios = await sql`SELECT * FROM investment_portfolios WHERE user_id = ${req.user!.id} ORDER BY created_at DESC`;
+  const result = await Promise.all(portfolios.map(async p => {
+    const assets = await sql`SELECT * FROM investment_assets WHERE portfolio_id = ${p.id}`;
     return { ...p, assets };
-  });
+  }));
   res.json(result);
 });
 
-router.post('/portfolios', requireAuth, (req: AuthRequest, res: Response) => {
-  const db = getDb();
+router.post('/portfolios', requireAuth, async (req: AuthRequest, res: Response) => {
+  const sql = getDb();
   const { name, description } = req.body;
   if (!name) { res.status(400).json({ error: 'Nombre requerido' }); return; }
-  const r = db.prepare('INSERT INTO investment_portfolios (user_id, family_id, name, description) VALUES (?, ?, ?, ?)')
-    .run(req.user!.id, req.user!.family_id, name, description ?? null);
-  res.status(201).json(db.prepare('SELECT * FROM investment_portfolios WHERE id = ?').get(r.lastInsertRowid));
+  const [p] = await sql`
+    INSERT INTO investment_portfolios (user_id, family_id, name, description)
+    VALUES (${req.user!.id}, ${req.user!.family_id}, ${name}, ${description ?? null})
+    RETURNING *
+  `;
+  res.status(201).json(p);
 });
 
-router.post('/portfolios/:id/assets', requireAuth, validate(InvestmentAssetSchema), (req: AuthRequest, res: Response) => {
-  const db = getDb();
+router.post('/portfolios/:id/assets', requireAuth, validate(InvestmentAssetSchema), async (req: AuthRequest, res: Response) => {
+  const sql = getDb();
   const { name, asset_type, ticker, amount_invested, current_value, currency, target_pct, annual_return } = req.body;
-  const r = db.prepare(`
+  const [asset] = await sql`
     INSERT INTO investment_assets (portfolio_id, name, asset_type, ticker, amount_invested, current_value, currency, target_pct, annual_return)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(req.params.id, name, asset_type, ticker ?? null, amount_invested, current_value, currency, target_pct ?? null, annual_return ?? null);
-
-  recalcAllocations(parseInt(req.params.id));
-  checkInvestmentAlerts(req.user!.id, parseInt(req.params.id));
-
-  res.status(201).json(db.prepare('SELECT * FROM investment_assets WHERE id = ?').get(r.lastInsertRowid));
+    VALUES (${req.params.id}, ${name}, ${asset_type}, ${ticker ?? null}, ${amount_invested}, ${current_value},
+            ${currency}, ${target_pct ?? null}, ${annual_return ?? null})
+    RETURNING *
+  `;
+  await recalcAllocations(parseInt(req.params.id));
+  await checkInvestmentAlerts(req.user!.id, parseInt(req.params.id));
+  res.status(201).json(asset);
 });
 
-router.patch('/assets/:assetId', requireAuth, (req: AuthRequest, res: Response) => {
-  const db = getDb();
-  const asset = db.prepare('SELECT * FROM investment_assets WHERE id = ?').get(req.params.assetId) as any;
+router.patch('/assets/:assetId', requireAuth, async (req: AuthRequest, res: Response) => {
+  const sql = getDb();
+  const [asset] = await sql`SELECT * FROM investment_assets WHERE id = ${req.params.assetId}`;
   if (!asset) { res.status(404).json({ error: 'No encontrado' }); return; }
-  const { name, current_value, amount_invested, target_pct, annual_return } = req.body;
-  db.prepare(`UPDATE investment_assets SET name = COALESCE(?, name), current_value = COALESCE(?, current_value),
-    amount_invested = COALESCE(?, amount_invested), target_pct = COALESCE(?, target_pct),
-    annual_return = COALESCE(?, annual_return), updated_at = datetime('now') WHERE id = ?`)
-    .run(name ?? null, current_value ?? null, amount_invested ?? null, target_pct ?? null, annual_return ?? null, req.params.assetId);
-
-  recalcAllocations(asset.portfolio_id);
-  checkInvestmentAlerts(req.user!.id, asset.portfolio_id);
-
-  res.json(db.prepare('SELECT * FROM investment_assets WHERE id = ?').get(req.params.assetId));
+  const [updated] = await sql`
+    UPDATE investment_assets SET
+      name            = COALESCE(${req.body.name ?? null}, name),
+      current_value   = COALESCE(${req.body.current_value ?? null}, current_value),
+      amount_invested = COALESCE(${req.body.amount_invested ?? null}, amount_invested),
+      target_pct      = COALESCE(${req.body.target_pct ?? null}, target_pct),
+      annual_return   = COALESCE(${req.body.annual_return ?? null}, annual_return),
+      updated_at      = NOW()
+    WHERE id = ${req.params.assetId} RETURNING *
+  `;
+  await recalcAllocations(Number(asset.portfolio_id));
+  await checkInvestmentAlerts(req.user!.id, Number(asset.portfolio_id));
+  res.json(updated);
 });
 
-router.delete('/assets/:assetId', requireAuth, (req: AuthRequest, res: Response) => {
-  const db = getDb();
-  const asset = db.prepare('SELECT * FROM investment_assets WHERE id = ?').get(req.params.assetId) as any;
+router.delete('/assets/:assetId', requireAuth, async (req: AuthRequest, res: Response) => {
+  const sql = getDb();
+  const [asset] = await sql`SELECT * FROM investment_assets WHERE id = ${req.params.assetId}`;
   if (!asset) { res.status(404).json({ error: 'No encontrado' }); return; }
-  db.prepare('DELETE FROM investment_assets WHERE id = ?').run(req.params.assetId);
-  recalcAllocations(asset.portfolio_id);
+  await sql`DELETE FROM investment_assets WHERE id = ${req.params.assetId}`;
+  await recalcAllocations(Number(asset.portfolio_id));
   res.status(204).send();
 });
 
-router.get('/assets/:assetId/projection', requireAuth, (req: AuthRequest, res: Response) => {
-  const db = getDb();
-  const asset = db.prepare('SELECT * FROM investment_assets WHERE id = ?').get(req.params.assetId) as any;
+router.get('/assets/:assetId/projection', requireAuth, async (req: AuthRequest, res: Response) => {
+  const sql = getDb();
+  const [asset] = await sql`SELECT * FROM investment_assets WHERE id = ${req.params.assetId}`;
   if (!asset) { res.status(404).json({ error: 'No encontrado' }); return; }
   const months = parseInt(req.query.months as string ?? '24');
-  const points = projectMonthlyReturns(asset.current_value, asset.annual_return ?? 5, months);
-  res.json(points);
+  res.json(projectMonthlyReturns(Number(asset.current_value), Number(asset.annual_return ?? 5), months));
 });
 
-router.get('/alerts', requireAuth, (req: AuthRequest, res: Response) => {
-  const db = getDb();
-  const alerts = db.prepare('SELECT * FROM investment_alerts WHERE user_id = ? AND is_read = 0 ORDER BY triggered_at DESC').all(req.user!.id);
+router.get('/alerts', requireAuth, async (req: AuthRequest, res: Response) => {
+  const sql = getDb();
+  const alerts = await sql`SELECT * FROM investment_alerts WHERE user_id = ${req.user!.id} AND is_read = FALSE ORDER BY triggered_at DESC`;
   res.json(alerts);
 });
 
-router.patch('/alerts/:id/read', requireAuth, (req: AuthRequest, res: Response) => {
-  const db = getDb();
-  db.prepare('UPDATE investment_alerts SET is_read = 1 WHERE id = ? AND user_id = ?').run(req.params.id, req.user!.id);
+router.patch('/alerts/:id/read', requireAuth, async (req: AuthRequest, res: Response) => {
+  const sql = getDb();
+  await sql`UPDATE investment_alerts SET is_read = TRUE WHERE id = ${req.params.id} AND user_id = ${req.user!.id}`;
   res.status(204).send();
 });
 
-function recalcAllocations(portfolioId: number) {
-  const db = getDb();
-  const assets = db.prepare('SELECT id, current_value FROM investment_assets WHERE portfolio_id = ?').all(portfolioId) as any[];
-  const total = assets.reduce((s, a) => s + a.current_value, 0);
-  for (const a of assets) {
-    const pct = total > 0 ? (a.current_value / total) * 100 : 0;
-    db.prepare('UPDATE investment_assets SET allocation_pct = ? WHERE id = ?').run(Math.round(pct * 100) / 100, a.id);
-  }
+async function recalcAllocations(portfolioId: number) {
+  const sql = getDb();
+  const assets = await sql`SELECT id, current_value FROM investment_assets WHERE portfolio_id = ${portfolioId}`;
+  const total = assets.reduce((s, a) => s + Number(a.current_value), 0);
+  await Promise.all(assets.map(a => {
+    const pct = total > 0 ? (Number(a.current_value) / total) * 100 : 0;
+    return sql`UPDATE investment_assets SET allocation_pct = ${Math.round(pct * 100) / 100} WHERE id = ${a.id}`;
+  }));
 }
 
-function checkInvestmentAlerts(userId: number, portfolioId: number) {
-  const db = getDb();
-  const assets = db.prepare('SELECT * FROM investment_assets WHERE portfolio_id = ?').all(portfolioId) as any[];
+async function checkInvestmentAlerts(userId: number, portfolioId: number) {
+  const sql = getDb();
+  const assets = await sql`SELECT * FROM investment_assets WHERE portfolio_id = ${portfolioId}`;
   for (const a of assets) {
-    if (a.target_pct !== null && a.allocation_pct !== null) {
-      const drift = Math.abs(a.allocation_pct - a.target_pct);
+    if (a.target_pct != null && a.allocation_pct != null) {
+      const drift = Math.abs(Number(a.allocation_pct) - Number(a.target_pct));
       if (drift > 5) {
-        db.prepare(`
+        await sql`
           INSERT INTO investment_alerts (user_id, asset_id, alert_type, threshold, message)
-          VALUES (?, ?, 'allocation_drift', ?, ?)
-        `).run(userId, a.id, 5, `"${a.name}" tiene una desviación de ${drift.toFixed(1)}% respecto a tu asignación objetivo.`);
-        db.prepare(`INSERT OR IGNORE INTO notifications (user_id, type, title, body, entity_id, entity_type)
-          VALUES (?, 'investment_alert', ?, ?, ?, 'investment_asset')`)
-          .run(userId, `⚖️ Rebalanceo sugerido: ${a.name}`, `Desviación de ${drift.toFixed(1)}% respecto al objetivo.`, a.id);
+          VALUES (${userId}, ${a.id}, 'allocation_drift', 5,
+                  ${`"${a.name}" tiene una desviación de ${drift.toFixed(1)}% respecto a tu asignación objetivo.`})
+        `;
+        await sql`
+          INSERT INTO notifications (user_id, type, title, body, entity_id, entity_type)
+          VALUES (${userId}, 'investment_alert', ${`⚖️ Rebalanceo sugerido: ${a.name}`},
+                  ${`Desviación de ${drift.toFixed(1)}% respecto al objetivo.`}, ${a.id}, 'investment_asset')
+          ON CONFLICT DO NOTHING
+        `;
       }
     }
   }

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "paths": {
+      "@gastos/shared": ["./packages/shared/src/index.ts"]
+    }
+  },
+  "include": ["api/**/*", "packages/shared/src/**/*", "packages/backend/src/**/*"]
+}

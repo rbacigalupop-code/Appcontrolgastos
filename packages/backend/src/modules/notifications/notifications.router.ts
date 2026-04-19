@@ -4,23 +4,24 @@ import { getDb } from '../../config/db';
 
 const router = Router();
 
-router.get('/', requireAuth, (req: AuthRequest, res: Response) => {
-  const db = getDb();
+router.get('/', requireAuth, async (req: AuthRequest, res: Response) => {
+  const sql = getDb();
   const { unread_only } = req.query;
-  const where = unread_only === 'true' ? `user_id = ? AND is_read = 0` : `user_id = ?`;
-  const rows = db.prepare(`SELECT * FROM notifications WHERE ${where} ORDER BY created_at DESC LIMIT 50`).all(req.user!.id);
+  const rows = unread_only === 'true'
+    ? await sql`SELECT * FROM notifications WHERE user_id = ${req.user!.id} AND is_read = FALSE ORDER BY created_at DESC LIMIT 50`
+    : await sql`SELECT * FROM notifications WHERE user_id = ${req.user!.id} ORDER BY created_at DESC LIMIT 50`;
   res.json(rows);
 });
 
-router.patch('/read-all', requireAuth, (req: AuthRequest, res: Response) => {
-  const db = getDb();
-  db.prepare('UPDATE notifications SET is_read = 1 WHERE user_id = ?').run(req.user!.id);
+router.patch('/read-all', requireAuth, async (req: AuthRequest, res: Response) => {
+  const sql = getDb();
+  await sql`UPDATE notifications SET is_read = TRUE WHERE user_id = ${req.user!.id}`;
   res.status(204).send();
 });
 
-router.patch('/:id/read', requireAuth, (req: AuthRequest, res: Response) => {
-  const db = getDb();
-  db.prepare('UPDATE notifications SET is_read = 1 WHERE id = ? AND user_id = ?').run(req.params.id, req.user!.id);
+router.patch('/:id/read', requireAuth, async (req: AuthRequest, res: Response) => {
+  const sql = getDb();
+  await sql`UPDATE notifications SET is_read = TRUE WHERE id = ${req.params.id} AND user_id = ${req.user!.id}`;
   res.status(204).send();
 });
 

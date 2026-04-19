@@ -17,5 +17,4 @@ export const env = {
   NODE_ENV: process.env.NODE_ENV ?? 'development',
   JWT_SECRET: process.env.JWT_SECRET ?? 'dev_jwt_secret_change_in_prod',
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET ?? 'dev_refresh_secret_change_in_prod',
-  DB_PATH: process.env.DB_PATH ?? path.resolve(__dirname, '../../data/gastos.db'),
 };

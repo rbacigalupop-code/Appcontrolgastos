@@ -12,6 +12,7 @@ import InvestmentsPage from './pages/investments/InvestmentsPage';
 import BudgetsPage from './pages/budgets/BudgetsPage';
 import AnalyticsPage from './pages/analytics/AnalyticsPage';
 import FamilyPage from './pages/family/FamilyPage';
+import MorePage from './pages/more/MorePage';
 import { PageLoader } from './components/common/LoadingSpinner';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -56,6 +57,7 @@ export default function App() {
           <Route path="budgets" element={<BudgetsPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="family" element={<FamilyPage />} />
+          <Route path="more" element={<MorePage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import fs from 'fs';
 import { env } from './config/env';
 import { getDb } from './config/db';
 import { errorHandler } from './middleware/errorHandler';
@@ -30,6 +32,7 @@ const seedAll = db.transaction(() => {
 });
 seedAll();
 
+// API routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/families', familiesRouter);
@@ -41,13 +44,21 @@ app.use('/api/v1/budgets', budgetsRouter);
 app.use('/api/v1/analytics', analyticsRouter);
 app.use('/api/v1/notifications', notificationsRouter);
 app.use('/api/v1/export', exportRouter);
-
 app.get('/api/v1/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
+
+// Serve compiled frontend in production
+const frontendDist = path.resolve(__dirname, '../../frontend/dist');
+if (env.NODE_ENV === 'production' && fs.existsSync(frontendDist)) {
+  app.use(express.static(frontendDist));
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
 
 app.use(errorHandler);
 
-app.listen(env.PORT, () => {
-  console.log(`🚀 Backend running on http://localhost:${env.PORT}`);
+app.listen(env.PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on http://0.0.0.0:${env.PORT} [${env.NODE_ENV}]`);
 });
 
 export default app;

@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "migrate": "ts-node src/db/migrate.ts",
-    "seed": "ts-node src/db/seed.ts"
+    "dev": "tsx watch src/index.ts",
+    "build": "echo 'Backend uses tsx at runtime'",
+    "start": "tsx src/index.ts",
+    "migrate": "tsx src/db/migrate.ts",
+    "seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
     "@gastos/shared": "*",
@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
+    "tsx": "^4.7.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -25,8 +26,6 @@
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.11.5",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
   }
 }

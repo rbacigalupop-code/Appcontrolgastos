@@ -1,0 +1,9 @@
+node_modules
+packages/*/node_modules
+packages/frontend/dist
+packages/backend/dist
+packages/backend/data
+*.db
+*.db-journal
+.env
+.git

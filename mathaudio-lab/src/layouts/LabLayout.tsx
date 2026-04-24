@@ -3,6 +3,7 @@ import ModeToggle from '../components/ModeToggle';
 import FretboardMath from '../components/FretboardMath';
 import BeatMultiplier from '../components/BeatMultiplier';
 import VisualizerScreen from '../components/VisualizerScreen';
+import MediaLibrary from '../components/MediaLibrary';
 
 // Color palette — immutable per concept (as per spec)
 const CONCEPT_COLORS = {
@@ -85,6 +86,17 @@ export default function LabLayout() {
             <VisualizerScreen />
           </LabCard>
         </div>
+
+        {/* ── Card D: Media Library ─────────────────────────────────────────── */}
+        <LabCard
+          title="Videos de Aprendizaje"
+          subtitle="Música + Matemáticas en YouTube"
+          accent={CONCEPT_COLORS.potencias}
+          icon="🎬"
+          hint="Mira estos videos para entender mejor cómo la música y las matemáticas van juntas."
+        >
+          <MediaLibrary />
+        </LabCard>
 
         {/* ── Quick reference for kids ─────────────────────────────────────── */}
         <motion.div

@@ -3,6 +3,7 @@ import ModeToggle from '../components/ModeToggle';
 import FretboardMath from '../components/FretboardMath';
 import BeatMultiplier from '../components/BeatMultiplier';
 import VisualizerScreen from '../components/VisualizerScreen';
+import MediaLibrary from '../components/MediaLibrary';
 
 export default function DawLayout() {
   const { isReady, isStarted } = useAudioEngine();
@@ -65,6 +66,16 @@ export default function DawLayout() {
           </div>
 
           <BeatMultiplier />
+
+          <div className="flex items-center gap-2 opacity-50">
+            <div className="h-px flex-1 bg-daw-border" />
+            <span className="text-xs text-daw-muted tracking-widest px-2">
+              MODULE D — MEDIA LIBRARY
+            </span>
+            <div className="h-px flex-1 bg-daw-border" />
+          </div>
+
+          <MediaLibrary />
         </section>
 
         {/* Right column: Visualizer */}

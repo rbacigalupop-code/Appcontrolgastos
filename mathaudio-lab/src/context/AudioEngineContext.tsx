@@ -103,7 +103,6 @@ export function AudioEngineProvider({ children }: { children: React.ReactNode })
     snareRef.current = snare;
 
     const hihat = new Tone.MetalSynth({
-      frequency: 400,
       envelope: { attack: 0.001, decay: 0.07, release: 0.06 },
       harmonicity: 5.1,
       modulationIndex: 32,
@@ -111,6 +110,7 @@ export function AudioEngineProvider({ children }: { children: React.ReactNode })
       octaves: 1.5,
       volume: -14,
     });
+    hihat.frequency.value = 400;
     hihat.connect(masterGain);
     hihatRef.current = hihat;
 

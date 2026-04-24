@@ -102,8 +102,13 @@ export default function VisualizerScreen() {
 
     if (analyser) {
       const raw = analyser.getValue();
-      // Tone.Analyser returns Float32Array for waveform type
-      const data = raw instanceof Float32Array ? raw : new Float32Array(raw as number[]);
+      // Tone.Analyser waveform returns Float32Array; guard against fft tuple variant
+      const data: Float32Array =
+        raw instanceof Float32Array
+          ? raw
+          : Array.isArray(raw)
+          ? (raw[0] instanceof Float32Array ? raw[0] : new Float32Array(raw as unknown as number[]))
+          : new Float32Array(2048);
       drawWaveform(ctx2d, data, w, h, isDaw);
     } else {
       // Engine not initialized — draw idle state

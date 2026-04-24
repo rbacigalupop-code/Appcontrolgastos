@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  /* Scrollbar — DAW mode */
+  .dark ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .dark ::-webkit-scrollbar-track { background: #121212; }
+  .dark ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+  .dark ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+  /* Scrollbar — Lab mode */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track { background: #eef2ff; }
+  ::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #a5b4fc; }
+}
+
+@layer utilities {
+  /* Prevent AudioContext click latency by pre-rendering paint */
+  .will-play {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+}

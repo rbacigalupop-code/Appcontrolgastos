@@ -1,0 +1,102 @@
+{
+  "examples": [
+    {
+      "id": "pmx_01",
+      "title": "Smoke on the Water",
+      "artist": "Deep Purple",
+      "genre": "Rock",
+      "concept": "Intervalos de cuarta perfecta",
+      "bpm": 112,
+      "instrumentation": ["Guitarra eléctrica", "Bajo", "Batería"],
+      "math_link": "Relación de frecuencias 4:3 (razón racional)",
+      "target_module": "FretboardMath",
+      "target_level": "2_medio",
+      "notes_demo": ["G2", "Bb2", "C3", "G2", "Bb2", "Db3", "C3"],
+      "fret_sequence": [3, 6, 8, 3, 6, 9, 8]
+    },
+    {
+      "id": "pmx_02",
+      "title": "Seven Nation Army",
+      "artist": "The White Stripes",
+      "genre": "Rock",
+      "concept": "Secuencia aritmética de semitonos",
+      "bpm": 124,
+      "instrumentation": ["Bajo (efecto octaver)", "Batería"],
+      "math_link": "Suma sucesiva: +2, +2, +3, +2, -2, -5",
+      "target_module": "FretboardMath",
+      "target_level": "5_basico",
+      "notes_demo": ["E2", "G2", "A2", "C3", "B2", "A2", "G2"],
+      "fret_sequence": [0, 3, 5, 8, 7, 5, 3]
+    },
+    {
+      "id": "pmx_03",
+      "title": "Welcome to the Black Parade",
+      "artist": "My Chemical Romance",
+      "genre": "Emo",
+      "concept": "Crescendo exponencial (potencias en dinámica)",
+      "bpm": 88,
+      "instrumentation": ["Piano", "Guitarra acústica", "Bajo", "Batería orquestal"],
+      "math_link": "Amplitud ∝ 2^n — cada sección dobla la energía sonora",
+      "target_module": "VisualizerScreen",
+      "target_level": "2_medio",
+      "notes_demo": ["G3", "D3", "E3", "C3"],
+      "fret_sequence": []
+    },
+    {
+      "id": "pmx_04",
+      "title": "Somebody That I Used to Know",
+      "artist": "Gotye",
+      "genre": "Pop",
+      "concept": "Ostinato — subdivisión de fracciones de tiempo",
+      "bpm": 129,
+      "instrumentation": ["Xilófono", "Guitarra acústica", "Bajo"],
+      "math_link": "Patrón mixto: negras (1/4) y corcheas (1/8) alternadas",
+      "target_module": "BeatMultiplier",
+      "target_level": "5_basico",
+      "notes_demo": ["D3", "C3", "D3", "A2"],
+      "beat_pattern": { "base": 4, "multiplier": 2, "time_signature": "4/4" }
+    },
+    {
+      "id": "pmx_05",
+      "title": "Bohemian Rhapsody",
+      "artist": "Queen",
+      "genre": "Rock",
+      "concept": "Cambios de compás — fracciones distintas",
+      "bpm": 72,
+      "instrumentation": ["Piano", "Voz", "Guitarra", "Bajo", "Batería"],
+      "math_link": "4/4, 3/4 y 6/8 — distintas formas de dividir el tiempo en fracciones",
+      "target_module": "BeatMultiplier",
+      "target_level": "5_basico",
+      "notes_demo": ["Bb3", "A3", "G3", "F3"],
+      "beat_pattern": { "base": 3, "multiplier": 4, "time_signature": "3/4" }
+    },
+    {
+      "id": "pmx_06",
+      "title": "Aerials",
+      "artist": "System of a Down",
+      "genre": "Rock",
+      "concept": "Compás asimétrico 7/8 — división no uniforme",
+      "bpm": 134,
+      "instrumentation": ["Guitarra drop-D", "Bajo 5 cuerdas", "Batería"],
+      "math_link": "7 = 3 + 4. Agrupaciones irregulares: suma de fracciones distintas",
+      "target_module": "BeatMultiplier",
+      "target_level": "2_medio",
+      "notes_demo": ["A2", "D3", "E3", "A3"],
+      "beat_pattern": { "base": 7, "multiplier": 2, "time_signature": "7/8" }
+    },
+    {
+      "id": "pmx_07",
+      "title": "Under the Bridge",
+      "artist": "Red Hot Chili Peppers",
+      "genre": "Rock",
+      "concept": "Progresión de acordes y relación de frecuencias",
+      "bpm": 84,
+      "instrumentation": ["Guitarra limpia", "Bajo", "Batería"],
+      "math_link": "Quinta perfecta: razón 3:2. Cada cuerda al aire traste 7 ≈ ⅔ de longitud",
+      "target_module": "FretboardMath",
+      "target_level": "2_medio",
+      "notes_demo": ["D3", "F#3", "A3", "E3"],
+      "fret_sequence": [0, 4, 7, 0]
+    }
+  ]
+}

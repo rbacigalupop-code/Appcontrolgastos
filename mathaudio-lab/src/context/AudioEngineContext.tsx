@@ -139,7 +139,9 @@ export function AudioEngineProvider({ children }: { children: React.ReactNode })
     (note: string | string[], duration = '4n') => {
       const synth = polySynthRef.current;
       if (!synth) return;
-      synth.triggerAttackRelease(note as string, duration, Tone.now());
+      // PolySynth accepts Frequency | Frequency[]; cast bypasses narrow TS signature
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (synth as any).triggerAttackRelease(note, duration, Tone.now());
     },
     []
   );
@@ -149,7 +151,7 @@ export function AudioEngineProvider({ children }: { children: React.ReactNode })
       const t = time ?? Tone.now();
       if (drum === 'kick') kickRef.current?.triggerAttackRelease('C1', '8n', t);
       if (drum === 'snare') snareRef.current?.triggerAttackRelease('8n', t);
-      if (drum === 'hihat') hihatRef.current?.triggerAttackRelease('32n', t);
+      if (drum === 'hihat') hihatRef.current?.triggerAttackRelease(400, '32n', t);
     },
     []
   );

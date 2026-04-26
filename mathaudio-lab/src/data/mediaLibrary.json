@@ -1,0 +1,92 @@
+{
+  "videos": [
+    {
+      "id": "mv_01",
+      "youtube_id": "5MkleW5_ymE",
+      "title": "Multiplication Songs – Times Tables 1–12",
+      "channel": "Have Fun Teaching",
+      "math_concept": "Multiplicación",
+      "target_level": "5_basico",
+      "description": "Canción animada que enseña todas las tablas de multiplicar con ritmo y melodía.",
+      "color": "#f472b6",
+      "tags": ["multiplicación", "tablas", "ritmo"]
+    },
+    {
+      "id": "mv_02",
+      "youtube_id": "L2-vKBFpvLY",
+      "title": "Fractions Song – Add & Subtract Fractions",
+      "channel": "Math Songs by NUMBEROCK",
+      "math_concept": "Fracciones",
+      "target_level": "5_basico",
+      "description": "Video musical animado con personajes que explican fracciones con visuales coloridos.",
+      "color": "#fbbf24",
+      "tags": ["fracciones", "suma", "animación"]
+    },
+    {
+      "id": "mv_03",
+      "youtube_id": "OmJ-4B-mS-Y",
+      "title": "Musical Fractions – String Lengths & Harmonics",
+      "channel": "Adam Neely",
+      "math_concept": "Fracciones en música",
+      "target_level": "2_medio",
+      "description": "Cómo las fracciones de longitud de cuerda producen acordes armónicos. Ideal para conectar con FretboardMath.",
+      "color": "#a78bfa",
+      "tags": ["fracciones", "armónicos", "cuerdas", "física"]
+    },
+    {
+      "id": "mv_04",
+      "youtube_id": "cyW5z-M2yzw",
+      "title": "Why do we use 12 notes? – Music Theory",
+      "channel": "12tone",
+      "math_concept": "Potencias de 2 / logaritmos",
+      "target_level": "2_medio",
+      "description": "Explicación visual de por qué la escala musical tiene 12 semitonos: 2^(1/12) y raíces de la octava.",
+      "color": "#7c3aed",
+      "tags": ["potencias", "logaritmos", "escala", "2medio"]
+    },
+    {
+      "id": "mv_05",
+      "youtube_id": "i6oi29c40iM",
+      "title": "Rhythm & Math – Beat Division for Kids",
+      "channel": "Musicplay Online",
+      "math_concept": "Fracciones de tiempo",
+      "target_level": "5_basico",
+      "description": "Actividad de ritmo donde los niños subdividen tiempos con palmas y percusión corporal.",
+      "color": "#fb923c",
+      "tags": ["ritmo", "división", "tiempo", "percusión"]
+    },
+    {
+      "id": "mv_06",
+      "youtube_id": "FnUBKFATNiA",
+      "title": "How Speakers Work – Sound Waves Visualized",
+      "channel": "ScienceABC",
+      "math_concept": "Física ondulatoria",
+      "target_level": "2_medio",
+      "description": "Visualización en slow-motion de ondas de sonido. Conecta directamente con el VisualizerScreen.",
+      "color": "#00ff9d",
+      "tags": ["ondas", "física", "frecuencia", "visualización"]
+    },
+    {
+      "id": "mv_07",
+      "youtube_id": "Ct-UDRQ_UD8",
+      "title": "The Math Behind Music – TED-Ed",
+      "channel": "TED-Ed",
+      "math_concept": "Álgebra / frecuencias",
+      "target_level": "2_medio",
+      "description": "Animación TED-Ed que explica la matemática detrás de la armonía musical: proporciones y logaritmos.",
+      "color": "#60a5fa",
+      "tags": ["álgebra", "armonía", "ted-ed", "proporción"]
+    },
+    {
+      "id": "mv_08",
+      "youtube_id": "a0GI10QVKHg",
+      "title": "Drumming & Counting – Polyrhythm for Beginners",
+      "channel": "Drumeo",
+      "math_concept": "Suma / MCD",
+      "target_level": "5_basico",
+      "description": "Cómo contar ritmos complejos usando matemáticas simples. Ideal para complementar el BeatMultiplier.",
+      "color": "#4ade80",
+      "tags": ["ritmo", "conteo", "batería", "polirritmia"]
+    }
+  ]
+}

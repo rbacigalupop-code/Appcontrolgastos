@@ -1,0 +1,88 @@
+{
+  "curriculum": [
+    {
+      "id": "arith_suma_5b",
+      "target_level": "5_basico",
+      "math_concept": "Suma",
+      "audio_metaphor": "Loops aditivos",
+      "description": "Cada beat que se agrega es una suma. 4 golpes + 4 golpes = 8 tiempos.",
+      "interactive_module": "BeatMultiplier",
+      "difficulty": 1,
+      "learning_outcome": "Asociar la operación de suma con la acumulación de pulsos rítmicos"
+    },
+    {
+      "id": "arith_mult_5b",
+      "target_level": "5_basico",
+      "math_concept": "Multiplicación",
+      "audio_metaphor": "Repetición de patrones rítmicos",
+      "description": "Base × Multiplicador = Total de tiempos por ciclo. Un patrón de 4 beats repetido 4 veces.",
+      "interactive_module": "BeatMultiplier",
+      "difficulty": 2,
+      "learning_outcome": "Visualizar la multiplicación como repetición de grupos iguales"
+    },
+    {
+      "id": "frac_basica_5b",
+      "target_level": "5_basico",
+      "math_concept": "Fracciones",
+      "audio_metaphor": "División de cuerda (½, ¼, ⅓)",
+      "description": "Presionar el traste 12 divide la cuerda exactamente a la mitad. La nota suena una octava más alta.",
+      "interactive_module": "FretboardMath",
+      "difficulty": 3,
+      "color_code": "#fbbf24",
+      "learning_outcome": "Comprender que una fracción describe una parte proporcional de un todo"
+    },
+    {
+      "id": "frac_ritmo_5b",
+      "target_level": "5_basico",
+      "math_concept": "Fracciones de tiempo",
+      "audio_metaphor": "Subdivisión rítmica (negra, corchea, semicorchea)",
+      "description": "Una negra es 1/4 de compás. Una corchea es 1/8. Una semicorchea es 1/16.",
+      "interactive_module": "BeatMultiplier",
+      "difficulty": 3,
+      "color_code": "#fb923c",
+      "learning_outcome": "Relacionar el valor de fracciones con la duración de notas musicales"
+    },
+    {
+      "id": "pot_octavas_2m",
+      "target_level": "2_medio",
+      "math_concept": "Potencias de base 2",
+      "audio_metaphor": "Frecuencia Logarítmica — Octavas",
+      "description": "Traste 0: f × 2⁰ = f. Traste 12: f × 2¹ = 2f. Traste 24: f × 2² = 4f.",
+      "interactive_module": "FretboardMath",
+      "difficulty": 4,
+      "color_code": "#a78bfa",
+      "learning_outcome": "Establecer la equivalencia entre 2^n y doblamiento de frecuencia acústica"
+    },
+    {
+      "id": "algebra_escala_2m",
+      "target_level": "2_medio",
+      "math_concept": "Álgebra — función exponencial",
+      "audio_metaphor": "Escala temperada igual: f(n) = f₀ × 2^(n/12)",
+      "description": "Cada semitono multiplica la frecuencia por 2^(1/12) ≈ 1.0595. Doce semitonos = una octava exacta.",
+      "interactive_module": "FretboardMath",
+      "difficulty": 5,
+      "color_code": "#7c3aed",
+      "learning_outcome": "Aplicar funciones exponenciales fraccionarias para modelar la afinación musical"
+    },
+    {
+      "id": "fisica_onda_2m",
+      "target_level": "2_medio",
+      "math_concept": "Física ondulatoria",
+      "audio_metaphor": "Forma de onda: amplitud, frecuencia y longitud",
+      "description": "La representación gráfica de una onda sinusoidal muestra amplitud (volumen) y frecuencia (tono) en tiempo real.",
+      "interactive_module": "VisualizerScreen",
+      "difficulty": 5,
+      "color_code": "#00ff9d",
+      "learning_outcome": "Relacionar parámetros matemáticos de ondas con su representación visual y sonora"
+    }
+  ],
+  "color_map": {
+    "units": "#f87171",
+    "tens": "#4ade80",
+    "hundreds": "#60a5fa",
+    "frac_half": "#fbbf24",
+    "frac_third": "#4ade80",
+    "frac_quarter": "#a78bfa",
+    "frac_eighth": "#fb923c"
+  }
+}
